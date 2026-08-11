@@ -8,3 +8,6 @@
 # Ignore OS metadata files
 .DS_Store
 Thumbs.db
+
+# content for personal reference (local only)
+reference/
