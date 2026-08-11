@@ -1,3 +1,50 @@
 spring:
   application:
     name: management
+
+  datasource:
+    url: "${DATABASE_URL}"
+    username: "${DATABASE_USERNAME}"
+    password: "${DATABASE_PASSWORD}"
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    location: classpath:db/migration
+    schemas: public
+
+  server:
+    port: 8080
+  
+  logging:
+    level:
+      org.flywaydb: DEBUG
+      org.hibernate.SQL: WARN
+      io.github.cdimascio: DEBUG
+  
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "mapping, health, scalar"
+
+  scalar: 
+    enabled: true
+    url: "/v3/api-docs"
+    theme: "deepSpace"
+    documentDownloadType: "both"
+    actuatorEnabled: true
