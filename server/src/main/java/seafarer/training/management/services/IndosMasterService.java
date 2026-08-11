@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import seafarer.training.management._exception.ResourceNotFoundException;
@@ -17,6 +18,7 @@ import seafarer.training.management.repositories.RankMasterRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class IndosMasterService {
 
     private final RankMasterRepository rankMasterRepository;
@@ -28,6 +30,7 @@ public class IndosMasterService {
         return seafarers.stream().map(indos -> indosMasterMapper.toResponseDTO(indos)).toList();
     }
 
+    @Transactional
     public IndosMasterResponseDTO saveIndosMasterRecord(IndosMasterRequestDTO body) {
         IndosMaster seafarer = indosMasterMapper.toEntity(body);
         IndosMaster savedSeafarer = indosMasterRepository.save(seafarer);
@@ -40,6 +43,7 @@ public class IndosMasterService {
         return indosMasterMapper.toResponseDTO(seafarer);
     }
 
+    @Transactional
     public IndosMasterResponseDTO updateRecordById(UUID id, IndosMasterRequestDTO body) {
         IndosMaster seafarer = indosMasterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find seafarer with id " + id));
@@ -53,6 +57,13 @@ public class IndosMasterService {
 
         indosMasterRepository.save(seafarer);
         return indosMasterMapper.toResponseDTO(seafarer);
+    }
+
+    @Transactional
+    public void deleteRecordById(UUID id) {
+        IndosMaster seafarer = indosMasterRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("could not find seafarer with id " + id));
+        indosMasterRepository.delete(seafarer);
     }
 
 }
