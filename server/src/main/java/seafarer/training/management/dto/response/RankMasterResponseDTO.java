@@ -19,6 +19,5 @@ public class RankMasterResponseDTO {
     private UUID id;
     private String name;
     private int level;
-    private OffsetDateTime createdAt;
 
 }

@@ -14,7 +14,6 @@ public class RankMasterMapper {
                 .id(rank.getId())
                 .name(rank.getName())
                 .level(rank.getLevel())
-                .createdAt(rank.getCreatedAt())
                 .build();
     }
 
