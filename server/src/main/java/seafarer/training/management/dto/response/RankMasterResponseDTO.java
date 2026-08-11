@@ -1,6 +1,5 @@
 package seafarer.training.management.dto.response;
 
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
