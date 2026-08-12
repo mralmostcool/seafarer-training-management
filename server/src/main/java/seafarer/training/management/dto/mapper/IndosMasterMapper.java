@@ -42,7 +42,7 @@ public class IndosMasterMapper {
                                 .indos(dto.getIndos())
                                 .firstName(dto.getFirstName())
                                 .rank(rank)
-                                .isActive(dto.getIsActive())
+                                .isActive(dto.getIsActive() != null ? dto.getIsActive() : true)
                                 .build();
         }
 

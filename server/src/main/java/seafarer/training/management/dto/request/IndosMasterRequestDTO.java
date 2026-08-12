@@ -29,7 +29,6 @@ public class IndosMasterRequestDTO {
     @NotNull(message = "Rank ID cannot be null")
     private UUID rankId;
 
-    @NotNull(message = "isActive cannot be null")
     private Boolean isActive;
 
 }

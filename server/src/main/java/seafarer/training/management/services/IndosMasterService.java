@@ -3,6 +3,10 @@ package seafarer.training.management.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +34,13 @@ public class IndosMasterService {
         return seafarers.stream().map(indos -> indosMasterMapper.toResponseDTO(indos)).toList();
     }
 
+    public Page<IndosMasterResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<IndosMaster> seafarersPage = indosMasterRepository.findAll(pageable);
+        return seafarersPage.map(indosMasterMapper::toResponseDTO);
+    }
+
     @Transactional
     public IndosMasterResponseDTO saveIndosMasterRecord(IndosMasterRequestDTO body) {
         IndosMaster seafarer = indosMasterMapper.toEntity(body);
@@ -49,7 +60,7 @@ public class IndosMasterService {
                 .orElseThrow(() -> new ResourceNotFoundException("could not find seafarer with id " + id));
         seafarer.setIndos(body.getIndos());
         seafarer.setFirstName(body.getFirstName());
-        seafarer.setIsActive(body.getIsActive());
+        seafarer.setIsActive(body.getIsActive() != null ? body.getIsActive() : seafarer.getIsActive());
 
         RankMaster newRank = rankMasterRepository.findById(body.getRankId())
                 .orElseThrow(() -> new ResourceNotFoundException("could not find rank with id " + body.getRankId()));
