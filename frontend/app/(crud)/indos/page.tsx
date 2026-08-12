@@ -503,7 +503,7 @@ export default function IndosMasterPage() {
                   </td>
                   <td className="px-6 py-4 text-right flex items-center justify-end gap-3.5">
                     <Link
-                      href={`/indos/${record.id}`}
+                      href={`/indos/${record.indos}`}
                       className="text-sm font-semibold text-zinc-550 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:underline"
                     >
                       View Details

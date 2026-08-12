@@ -37,12 +37,16 @@ export default function SeafarerDetailPage({ params }: PageProps) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:8080/api/crud/indos-master/${id}`);
+        const res = await fetch(`http://localhost:8080/api/crud/indos-master/page?search=${encodeURIComponent(id)}&size=1`);
         if (!res.ok) {
           throw new Error(`Failed to fetch seafarer profile (HTTP ${res.status})`);
         }
         const data = await res.json();
-        setSeafarer(data);
+        if (data.content && data.content.length > 0) {
+          setSeafarer(data.content[0]);
+        } else {
+          throw new Error(`No seafarer found with INDOS "${id}"`);
+        }
       } catch (err: any) {
         setError(err.message || "An unexpected error occurred loading details");
       } finally {
