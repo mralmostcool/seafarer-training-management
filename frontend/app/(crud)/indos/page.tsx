@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 interface Rank {
   id: string;
@@ -43,6 +43,12 @@ export default function IndosMasterPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
 
+  // Search & Filter state
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterRankId, setFilterRankId] = useState("");
+  const [filterIsActive, setFilterIsActive] = useState("");
+
   // Side Panel state
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [selectedRecord, setSelectedRecord] = useState<IndosRecord | null>(null);
@@ -74,16 +80,25 @@ export default function IndosMasterPage() {
     setLoading(true);
     setError(null);
     try {
-      // Map frontend sort fields to database entities property paths
       let sortBy = "id";
       if (sortField === "indos") sortBy = "indos";
       else if (sortField === "firstName") sortBy = "firstName";
-      else if (sortField === "rank") sortBy = "rank.level"; // Sort on rank's level in the database join
+      else if (sortField === "rank") sortBy = "rank.level";
       else if (sortField === "isActive") sortBy = "isActive";
 
       const sortDir = sortOrder;
-      const url = `http://localhost:8080/api/crud/indos-master/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+      let url = `http://localhost:8080/api/crud/indos-master/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
       
+      if (searchQuery.trim()) {
+        url += `&search=${encodeURIComponent(searchQuery.trim())}`;
+      }
+      if (filterRankId) {
+        url += `&rankId=${filterRankId}`;
+      }
+      if (filterIsActive) {
+        url += `&isActive=${filterIsActive}`;
+      }
+
       const res = await fetch(url);
       if (!res.ok) {
         throw new Error(`Failed to fetch INDOS records (HTTP ${res.status})`);
@@ -125,10 +140,41 @@ export default function IndosMasterPage() {
     }
   };
 
-  // Re-fetch when page, size, sorting fields, or sort order changes
+  // Initial load
+  useEffect(() => {
+    fetchRanks();
+  }, []);
+
+  // Fetch when page, size, sorting, or active filter states change
   useEffect(() => {
     fetchRecords();
-  }, [currentPage, pageSize, sortField, sortOrder]);
+  }, [currentPage, pageSize, sortField, sortOrder, searchQuery, filterRankId, filterIsActive]);
+
+  const handleRankFilterChange = (val: string) => {
+    setFilterRankId(val);
+    setCurrentPage(0);
+  };
+
+  const handleActiveFilterChange = (val: string) => {
+    setFilterIsActive(val);
+    setCurrentPage(0);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchQuery(searchInput);
+    setCurrentPage(0);
+    showToast(`Searching for "${searchInput}"`, "info");
+  };
+
+  const handleClearFilters = () => {
+    setSearchInput("");
+    setSearchQuery("");
+    setFilterRankId("");
+    setFilterIsActive("");
+    setCurrentPage(0);
+    showToast("Filters cleared", "info");
+  };
 
   const openAddPanel = () => {
     setSelectedRecord(null);
@@ -140,7 +186,6 @@ export default function IndosMasterPage() {
     setSubmitError(null);
     setPanelMode("add");
     showToast("Opening new record panel", "info");
-    fetchRanks();
   };
 
   const openEditPanel = (record: IndosRecord) => {
@@ -153,7 +198,6 @@ export default function IndosMasterPage() {
     setSubmitError(null);
     setPanelMode("edit");
     showToast(`Editing profile for: ${record.firstName}`, "info");
-    fetchRanks();
   };
 
   const closePanel = () => {
@@ -220,7 +264,7 @@ export default function IndosMasterPage() {
         "success"
       );
       closePanel();
-      await fetchRecords(); // Reload the table data
+      await fetchRecords(); // Reload current page
     } catch (err: any) {
       const msg = err.message || "An error occurred while saving the record";
       setSubmitError(msg);
@@ -231,7 +275,7 @@ export default function IndosMasterPage() {
   };
 
   const handleSort = (field: Exclude<SortField, null>) => {
-    setCurrentPage(0); // Reset page to first page when changing sort order
+    setCurrentPage(0);
     if (sortField === field) {
       if (sortOrder === "asc") {
         setSortOrder("desc");
@@ -268,6 +312,66 @@ export default function IndosMasterPage() {
         </div>
       </div>
 
+      {/* Search and Filters row */}
+      <div className="bg-white dark:bg-zinc-950 p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm select-none">
+        <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Search by INDOS or First Name..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-1.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+          >
+            Search
+          </button>
+        </form>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-zinc-550 dark:text-zinc-400 font-medium">Rank:</span>
+            <select
+              value={filterRankId}
+              onChange={(e) => handleRankFilterChange(e.target.value)}
+              className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-905 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="">All Ranks</option>
+              {ranks.map((rank) => (
+                <option key={rank.id} value={rank.id}>
+                  {rank.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-zinc-550 dark:text-zinc-400 font-medium">Status:</span>
+            <select
+              value={filterIsActive}
+              onChange={(e) => handleActiveFilterChange(e.target.value)}
+              className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-905 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="">All Statuses</option>
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+
+          {(searchQuery || filterRankId || filterIsActive) && (
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="text-xs font-semibold text-rose-600 dark:text-rose-450 hover:text-rose-500 hover:underline px-2 py-1.5 rounded-md hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all"
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
+      </div>
+
       {loading && records.length === 0 ? (
         <div className="flex items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
           <p className="text-zinc-500 text-sm">Loading records...</p>
@@ -283,8 +387,16 @@ export default function IndosMasterPage() {
           </button>
         </div>
       ) : records.length === 0 ? (
-        <div className="flex items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
-          <p className="text-zinc-500 text-sm">No INDOS records found in database.</p>
+        <div className="flex flex-col items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950 p-6 text-center">
+          <p className="text-zinc-500 text-sm">No records found matching filters.</p>
+          {(searchQuery || filterRankId || filterIsActive) && (
+            <button
+              onClick={handleClearFilters}
+              className="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Clear search filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950 shadow-sm">
@@ -452,7 +564,7 @@ export default function IndosMasterPage() {
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between p-6 overflow-y-auto">
             <div className="space-y-5">
               {submitError && (
-                <div className="rounded bg-rose-50 dark:bg-rose-950/20 p-3 text-xs text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30">
+                <div className="rounded bg-rose-50 dark:bg-rose-950/20 p-3 text-xs text-rose-700 dark:text-rose-450 border border-rose-100 dark:border-rose-900/30">
                   {submitError}
                 </div>
               )}
