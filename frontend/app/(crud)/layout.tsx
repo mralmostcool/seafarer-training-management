@@ -35,6 +35,12 @@ export default function CrudLayout({
             >
               <span>Pre-Sea Course</span>
             </Link>
+            <Link
+              href="/enrollment"
+              className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300"
+            >
+              <span>Enrollment</span>
+            </Link>
           </nav>
         </div>
 
