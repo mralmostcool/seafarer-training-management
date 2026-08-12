@@ -3,6 +3,8 @@ package seafarer.training.management.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,27 +31,32 @@ public class IndosMasterService {
     private final IndosMasterRepository indosMasterRepository;
     private final IndosMasterMapper indosMasterMapper;
 
+    @Cacheable(value = "indos", key = "'all'")
     public List<IndosMasterResponseDTO> getAllRecords() {
         List<IndosMaster> seafarers = indosMasterRepository.findAll();
         return seafarers.stream().map(indos -> indosMasterMapper.toResponseDTO(indos)).toList();
     }
 
-    public Page<IndosMasterResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir, String search, UUID rankId, Boolean isActive) {
+    public Page<IndosMasterResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir,
+            String search, UUID rankId, Boolean isActive) {
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        
+
         String searchParam = search != null ? search.trim() : "";
-        Page<IndosMaster> seafarersPage = indosMasterRepository.findBySearchAndFilters(searchParam, rankId, isActive, pageable);
+        Page<IndosMaster> seafarersPage = indosMasterRepository.findBySearchAndFilters(searchParam, rankId, isActive,
+                pageable);
         return seafarersPage.map(indosMasterMapper::toResponseDTO);
     }
 
     @Transactional
+    @CacheEvict(value = "indos", allEntries = true)
     public IndosMasterResponseDTO saveIndosMasterRecord(IndosMasterRequestDTO body) {
         IndosMaster seafarer = indosMasterMapper.toEntity(body);
         IndosMaster savedSeafarer = indosMasterRepository.save(seafarer);
         return indosMasterMapper.toResponseDTO(savedSeafarer);
     }
 
+    @Cacheable(value = "indos", key = "#id")
     public IndosMasterResponseDTO getRecordById(UUID id) {
         IndosMaster seafarer = indosMasterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find seafarer with id " + id));
@@ -57,6 +64,7 @@ public class IndosMasterService {
     }
 
     @Transactional
+    @CacheEvict(value = "indos", allEntries = true)
     public IndosMasterResponseDTO updateRecordById(UUID id, IndosMasterRequestDTO body) {
         IndosMaster seafarer = indosMasterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find seafarer with id " + id));
@@ -73,6 +81,7 @@ public class IndosMasterService {
     }
 
     @Transactional
+    @CacheEvict(value = "indos", allEntries = true)
     public void deleteRecordById(UUID id) {
         IndosMaster seafarer = indosMasterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find seafarer with id " + id));

@@ -3,6 +3,8 @@ package seafarer.training.management.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,27 +28,31 @@ public class PreSeaCourseService {
     private final PreSeaCourseRepository preSeaCourseRepository;
     private final PreSeaCourseMapper preSeaCourseMapper;
 
+    @Cacheable(value = "courses", key = "'all'")
     public List<PreSeaCourseResponseDTO> getAllCourses() {
         List<PreSeaCourse> courses = preSeaCourseRepository.findAll();
         return courses.stream().map(preSeaCourseMapper::toResponseDTO).toList();
     }
 
-    public Page<PreSeaCourseResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir, String search, Boolean isActive) {
+    public Page<PreSeaCourseResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir,
+            String search, Boolean isActive) {
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        
+
         String searchParam = search != null ? search.trim() : "";
         Page<PreSeaCourse> coursesPage = preSeaCourseRepository.findBySearchAndFilters(searchParam, isActive, pageable);
         return coursesPage.map(preSeaCourseMapper::toResponseDTO);
     }
 
     @Transactional
+    @CacheEvict(value = "courses", allEntries = true)
     public PreSeaCourseResponseDTO saveCourse(PreSeaCourseRequestDTO body) {
         PreSeaCourse course = preSeaCourseMapper.toEntity(body);
         PreSeaCourse savedCourse = preSeaCourseRepository.save(course);
         return preSeaCourseMapper.toResponseDTO(savedCourse);
     }
 
+    @Cacheable(value = "courses", key = "#id")
     public PreSeaCourseResponseDTO getCourseById(UUID id) {
         PreSeaCourse course = preSeaCourseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find course with id " + id));
@@ -54,6 +60,7 @@ public class PreSeaCourseService {
     }
 
     @Transactional
+    @CacheEvict(value = "courses", allEntries = true)
     public PreSeaCourseResponseDTO updateCourseById(UUID id, PreSeaCourseRequestDTO body) {
         PreSeaCourse course = preSeaCourseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find course with id " + id));
@@ -66,6 +73,7 @@ public class PreSeaCourseService {
     }
 
     @Transactional
+    @CacheEvict(value = "courses", allEntries = true)
     public void deleteCourseById(UUID id) {
         PreSeaCourse course = preSeaCourseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find course with id " + id));

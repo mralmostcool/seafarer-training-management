@@ -3,6 +3,8 @@ package seafarer.training.management.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,7 @@ public class EnrollmentService {
     private final IndosMasterRepository indosMasterRepository;
     private final EnrollmentMapper enrollmentMapper;
 
+    @Cacheable(value = "enrollment", key = "'all'")
     public List<EnrollmentResponseDTO> getAllEnrollments() {
         List<Enrollment> enrollments = enrollmentRepository.findAll();
         return enrollments.stream().map(enrollmentMapper::toResponseDTO).toList();
@@ -43,7 +46,7 @@ public class EnrollmentService {
             UUID courseId, UUID indosMasterId, EnrollmentStatus status) {
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        
+
         String searchParam = search != null ? search.trim() : "";
         Page<Enrollment> enrollmentsPage = enrollmentRepository.findBySearchAndFilters(
                 searchParam, courseId, indosMasterId, status, pageable);
@@ -51,12 +54,14 @@ public class EnrollmentService {
     }
 
     @Transactional
+    @CacheEvict(value = "enrollment", allEntries = true)
     public EnrollmentResponseDTO saveEnrollment(EnrollmentRequestDTO body) {
         Enrollment enrollment = enrollmentMapper.toEntity(body);
         Enrollment savedEnrollment = enrollmentRepository.save(enrollment);
         return enrollmentMapper.toResponseDTO(savedEnrollment);
     }
 
+    @Cacheable(value = "enrollment", key = "#id")
     public EnrollmentResponseDTO getEnrollmentById(UUID id) {
         Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find enrollment with id " + id));
@@ -64,14 +69,17 @@ public class EnrollmentService {
     }
 
     @Transactional
+    @CacheEvict(value = "enrollment", allEntries = true)
     public EnrollmentResponseDTO updateEnrollmentById(UUID id, EnrollmentRequestDTO body) {
         Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find enrollment with id " + id));
-        
+
         PreSeaCourse preSeaCourse = preSeaCourseRepository.findById(body.getPreSeaCourseId())
-                .orElseThrow(() -> new ResourceNotFoundException("Pre-sea course not found with ID: " + body.getPreSeaCourseId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Pre-sea course not found with ID: " + body.getPreSeaCourseId()));
         IndosMaster indosMaster = indosMasterRepository.findById(body.getIndosMasterId())
-                .orElseThrow(() -> new ResourceNotFoundException("INDoS master not found with ID: " + body.getIndosMasterId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "INDoS master not found with ID: " + body.getIndosMasterId()));
 
         enrollment.setPreSeaCourse(preSeaCourse);
         enrollment.setIndosMaster(indosMaster);
@@ -83,6 +91,7 @@ public class EnrollmentService {
     }
 
     @Transactional
+    @CacheEvict(value = "enrollment", allEntries = true)
     public void deleteEnrollmentById(UUID id) {
         Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("could not find enrollment with id " + id));

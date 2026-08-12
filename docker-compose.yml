@@ -1,5 +1,17 @@
 services:
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    command: redis-server --save 60 1 --loglevel warning
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - app-network
+
   nginx:
     build:
       context: ./nginx
@@ -25,6 +37,9 @@ services:
       - ./server/.env
     expose:
       - "8080"
+    depends_on:
+      redis:
+        condition: service_started
     healthcheck:
       test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health" ]
       interval: 5s
@@ -53,3 +68,7 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
