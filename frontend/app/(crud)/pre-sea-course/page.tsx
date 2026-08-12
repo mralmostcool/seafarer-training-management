@@ -75,7 +75,7 @@ export default function PreSeaCoursePage() {
       else if (sortField === "isActive") sortBy = "isActive";
 
       const sortDir = sortOrder;
-      let url = `http://localhost:8080/api/crud/pre-sea-courses/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+      let url = `/api/crud/pre-sea-courses/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
       
       if (searchQuery.trim()) {
         url += `&search=${encodeURIComponent(searchQuery.trim())}`;
@@ -192,8 +192,8 @@ export default function PreSeaCoursePage() {
     try {
       const isEdit = panelMode === "edit";
       const url = isEdit
-        ? `http://localhost:8080/api/crud/pre-sea-courses/${selectedRecord?.id}`
-        : "http://localhost:8080/api/crud/pre-sea-courses";
+        ? `/api/crud/pre-sea-courses/${selectedRecord?.id}`
+        : "/api/crud/pre-sea-courses";
       const method = isEdit ? "PUT" : "POST";
 
       const payload: any = {
@@ -247,7 +247,7 @@ export default function PreSeaCoursePage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/crud/pre-sea-courses/${selectedRecord.id}`,
+        `/api/crud/pre-sea-courses/${selectedRecord.id}`,
         {
           method: "DELETE",
         }

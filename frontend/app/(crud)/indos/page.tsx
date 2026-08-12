@@ -88,7 +88,7 @@ export default function IndosMasterPage() {
       else if (sortField === "isActive") sortBy = "isActive";
 
       const sortDir = sortOrder;
-      let url = `http://localhost:8080/api/crud/indos-master/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+      let url = `/api/crud/indos-master/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
       
       if (searchQuery.trim()) {
         url += `&search=${encodeURIComponent(searchQuery.trim())}`;
@@ -126,7 +126,7 @@ export default function IndosMasterPage() {
     setRanksLoading(true);
     setRanksError(null);
     try {
-      const res = await fetch("http://localhost:8080/api/crud/rank-master");
+      const res = await fetch("/api/crud/rank-master");
       if (!res.ok) {
         throw new Error(`Failed to fetch ranks (HTTP ${res.status})`);
       }
@@ -234,8 +234,8 @@ export default function IndosMasterPage() {
     try {
       const isEdit = panelMode === "edit";
       const url = isEdit
-        ? `http://localhost:8080/api/crud/indos-master/${selectedRecord?.id}`
-        : "http://localhost:8080/api/crud/indos-master";
+        ? `/api/crud/indos-master/${selectedRecord?.id}`
+        : "/api/crud/indos-master";
       const method = isEdit ? "PUT" : "POST";
 
       const payload: any = {
@@ -288,7 +288,7 @@ export default function IndosMasterPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/crud/indos-master/${selectedRecord.id}`,
+        `/api/crud/indos-master/${selectedRecord.id}`,
         {
           method: "DELETE",
         }

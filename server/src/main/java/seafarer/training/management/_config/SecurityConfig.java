@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/scalar/**", "/v3/api-docs/**", "/actuator/**").permitAll()
+                        .requestMatchers("/api/**", "/scalar/**", "/v3/api-docs/**", "/actuator/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();
@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+        config.setAllowedOrigins(List.of("http://localhost"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);

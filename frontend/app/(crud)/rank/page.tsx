@@ -24,7 +24,7 @@ export default function RankPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:8080/api/crud/rank-master");
+      const res = await fetch("/api/crud/rank-master");
       if (!res.ok) {
         throw new Error(`Failed to fetch ranks (HTTP ${res.status})`);
       }

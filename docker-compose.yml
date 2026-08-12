@@ -1,4 +1,21 @@
 services:
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx-proxy
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - app-network
+
   backend:
     build:
       context: ./server
@@ -6,8 +23,14 @@ services:
     container_name: springboot-backend
     env_file:
       - ./server/.env
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     restart: unless-stopped
     networks:
       - app-network
@@ -17,12 +40,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost/api}
     container_name: nextjs-frontend
     depends_on:
       - backend
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     restart: unless-stopped
     networks:
       - app-network

@@ -58,7 +58,7 @@ export default function EnrollmentDetailPage({ params }: PageProps) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:8080/api/crud/enrollments/${id}`);
+        const res = await fetch(`/api/crud/enrollments/${id}`);
         if (!res.ok) {
           throw new Error(`Failed to fetch enrollment detail (HTTP ${res.status})`);
         }

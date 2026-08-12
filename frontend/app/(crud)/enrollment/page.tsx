@@ -128,7 +128,7 @@ export default function EnrollmentPage() {
       else if (sortField === "createdAt") sortBy = "createdAt";
 
       const sortDir = sortOrder;
-      let url = `http://localhost:8080/api/crud/enrollments/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+      let url = `/api/crud/enrollments/page?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
 
       if (searchQuery.trim()) {
         url += `&search=${encodeURIComponent(searchQuery.trim())}`;
@@ -170,7 +170,7 @@ export default function EnrollmentPage() {
     setDropdownsError(null);
     try {
       // Fetch pre-sea courses
-      const coursesRes = await fetch("http://localhost:8080/api/crud/pre-sea-courses");
+      const coursesRes = await fetch("/api/crud/pre-sea-courses");
       if (!coursesRes.ok) {
         throw new Error(`Failed to fetch courses list (HTTP ${coursesRes.status})`);
       }
@@ -178,7 +178,7 @@ export default function EnrollmentPage() {
       setCourses(coursesData);
 
       // Fetch INDOS records
-      const seafarersRes = await fetch("http://localhost:8080/api/crud/indos-master");
+      const seafarersRes = await fetch("/api/crud/indos-master");
       if (!seafarersRes.ok) {
         throw new Error(`Failed to fetch INDOS seafarers list (HTTP ${seafarersRes.status})`);
       }
@@ -316,8 +316,8 @@ export default function EnrollmentPage() {
     try {
       const isEdit = panelMode === "edit";
       const url = isEdit
-        ? `http://localhost:8080/api/crud/enrollments/${selectedRecord?.id}`
-        : "http://localhost:8080/api/crud/enrollments";
+        ? `/api/crud/enrollments/${selectedRecord?.id}`
+        : "/api/crud/enrollments";
       const method = isEdit ? "PUT" : "POST";
 
       const payload = {
@@ -368,7 +368,7 @@ export default function EnrollmentPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/crud/enrollments/${selectedRecord.id}`,
+        `/api/crud/enrollments/${selectedRecord.id}`,
         {
           method: "DELETE",
         }

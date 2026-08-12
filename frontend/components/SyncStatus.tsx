@@ -14,7 +14,7 @@ export default function SyncStatus() {
       const controller = new AbortController();
       const id = setTimeout(() => controller.abort(), 2000); // 2 second timeout
 
-      const res = await fetch("http://localhost:8080/actuator/health", {
+      const res = await fetch("/actuator/health", {
         signal: controller.signal,
         cache: "no-store",
       });

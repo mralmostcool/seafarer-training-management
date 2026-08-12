@@ -30,7 +30,7 @@ export default function CourseDetailPage({ params }: PageProps) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:8080/api/crud/pre-sea-courses/${id}`);
+        const res = await fetch(`/api/crud/pre-sea-courses/${id}`);
         if (!res.ok) {
           throw new Error(`Failed to fetch course detail (HTTP ${res.status})`);
         }

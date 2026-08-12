@@ -60,7 +60,7 @@ export default function SeafarerDetailPage({ params }: PageProps) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:8080/api/crud/indos-master/page?search=${encodeURIComponent(id)}&size=1`);
+        const res = await fetch(`/api/crud/indos-master/page?search=${encodeURIComponent(id)}&size=1`);
         if (!res.ok) {
           throw new Error(`Failed to fetch seafarer profile (HTTP ${res.status})`);
         }
@@ -87,7 +87,7 @@ export default function SeafarerDetailPage({ params }: PageProps) {
       setEnrollmentsLoading(true);
       setEnrollmentsError(null);
       try {
-        const res = await fetch(`http://localhost:8080/api/crud/enrollments/page?indosMasterId=${seafarer.id}&size=100`);
+        const res = await fetch(`/api/crud/enrollments/page?indosMasterId=${seafarer.id}&size=100`);
         if (!res.ok) {
           throw new Error(`Failed to fetch enrollments (HTTP ${res.status})`);
         }
