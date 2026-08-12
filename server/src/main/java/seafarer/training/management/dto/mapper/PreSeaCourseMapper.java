@@ -23,7 +23,7 @@ public class PreSeaCourseMapper {
     public PreSeaCourse toEntity(PreSeaCourseRequestDTO dto) {
         return PreSeaCourse.builder()
                 .name(dto.getName())
-                .isActive(dto.getIsActive())
+                .isActive(dto.getIsActive() != null ? dto.getIsActive() : true)
                 .startDate(dto.getStartDate())
                 .build();
     }

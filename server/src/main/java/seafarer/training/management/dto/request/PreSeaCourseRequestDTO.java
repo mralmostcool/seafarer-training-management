@@ -22,7 +22,6 @@ public class PreSeaCourseRequestDTO {
     @Size(max = 255, message = "Course name cannot be longer than 255 characters")
     private String name;
 
-    @NotNull(message = "isActive cannot be null")
     private Boolean isActive;
 
     @NotNull(message = "Start date cannot be null")
