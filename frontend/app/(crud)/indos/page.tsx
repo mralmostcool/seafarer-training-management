@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Link from "next/link";
 
 interface Rank {
   id: string;
@@ -500,7 +501,13 @@ export default function IndosMasterPage() {
                       {record.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right flex items-center justify-end gap-3.5">
+                    <Link
+                      href={`/indos/${record.id}`}
+                      className="text-sm font-semibold text-zinc-550 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:underline"
+                    >
+                      View Details
+                    </Link>
                     <button
                       onClick={() => openEditPanel(record)}
                       className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline"
