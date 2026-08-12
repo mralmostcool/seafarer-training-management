@@ -274,6 +274,41 @@ export default function IndosMasterPage() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!selectedRecord) return;
+    
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the record for ${selectedRecord.firstName}?`
+    );
+    if (!confirmDelete) return;
+
+    setSubmitLoading(true);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/crud/indos-master/${selectedRecord.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`Failed to delete record (HTTP ${res.status})`);
+      }
+
+      showToast("Record deleted successfully", "success");
+      closePanel();
+      await fetchRecords();
+    } catch (err: any) {
+      const msg = err.message || "An error occurred while deleting the record";
+      setSubmitError(msg);
+      showToast(msg, "error");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   const handleSort = (field: Exclude<SortField, null>) => {
     setCurrentPage(0);
     if (sortField === field) {
@@ -654,23 +689,38 @@ export default function IndosMasterPage() {
                 </div>
               )}
 
-              <div className="flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={closePanel}
-                  className="rounded-md border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitLoading || ranksLoading || !!ranksError || (panelMode === "edit" && !consentChecked)}
-                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
-                >
-                  {submitLoading 
-                    ? "Saving..." 
-                    : panelMode === "edit" ? "Save Changes" : "Add Record"}
-                </button>
+              <div className="flex items-center justify-between gap-3">
+                {panelMode === "edit" ? (
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={submitLoading}
+                    className="rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 disabled:opacity-50 transition-colors"
+                  >
+                    Delete Record
+                  </button>
+                ) : (
+                  <div />
+                )}
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={closePanel}
+                    className="rounded-md border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitLoading || ranksLoading || !!ranksError || (panelMode === "edit" && !consentChecked)}
+                    className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+                  >
+                    {submitLoading 
+                      ? "Saving..." 
+                      : panelMode === "edit" ? "Save Changes" : "Add Record"}
+                  </button>
+                </div>
               </div>
             </div>
           </form>
