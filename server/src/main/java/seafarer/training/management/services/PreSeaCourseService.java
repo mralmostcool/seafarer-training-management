@@ -31,7 +31,7 @@ public class PreSeaCourseService {
     @Cacheable(value = "courses", key = "'all'")
     public List<PreSeaCourseResponseDTO> getAllCourses() {
         List<PreSeaCourse> courses = preSeaCourseRepository.findAll();
-        return courses.stream().map(preSeaCourseMapper::toResponseDTO).toList();
+        return courses.stream().map(preSeaCourseMapper::toResponseDTO).collect(java.util.stream.Collectors.toList());
     }
 
     public Page<PreSeaCourseResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir,

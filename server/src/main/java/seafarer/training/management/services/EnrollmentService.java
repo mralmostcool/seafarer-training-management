@@ -38,7 +38,7 @@ public class EnrollmentService {
     @Cacheable(value = "enrollment", key = "'all'")
     public List<EnrollmentResponseDTO> getAllEnrollments() {
         List<Enrollment> enrollments = enrollmentRepository.findAll();
-        return enrollments.stream().map(enrollmentMapper::toResponseDTO).toList();
+        return enrollments.stream().map(enrollmentMapper::toResponseDTO).collect(java.util.stream.Collectors.toList());
     }
 
     public Page<EnrollmentResponseDTO> getRecordsPaginated(

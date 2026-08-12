@@ -34,7 +34,7 @@ public class IndosMasterService {
     @Cacheable(value = "indos", key = "'all'")
     public List<IndosMasterResponseDTO> getAllRecords() {
         List<IndosMaster> seafarers = indosMasterRepository.findAll();
-        return seafarers.stream().map(indos -> indosMasterMapper.toResponseDTO(indos)).toList();
+        return seafarers.stream().map(indos -> indosMasterMapper.toResponseDTO(indos)).collect(java.util.stream.Collectors.toList());
     }
 
     public Page<IndosMasterResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir,
