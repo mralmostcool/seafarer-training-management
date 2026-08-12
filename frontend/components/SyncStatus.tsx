@@ -40,14 +40,14 @@ export default function SyncStatus() {
   }, [checkConnection]);
 
   return (
-    <div className="mt-auto border-t border-zinc-200 pt-4 dark:border-zinc-800">
-      <div className="flex flex-col gap-2 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900/50">
+    <div className="border-t border-hairline pt-4">
+      <div className="flex flex-col gap-2 rounded-md border border-hairline bg-surface-soft p-3">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">Sync State</span>
+          <span className="text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Sync State</span>
           <button
             onClick={checkConnection}
             disabled={status === "checking"}
-            className="text-[10px] font-medium text-blue-600 hover:text-blue-500 hover:underline disabled:text-zinc-400 transition-colors"
+            className="text-[10px] font-semibold text-accent-interactive hover:underline disabled:text-muted-text disabled:no-underline transition-all duration-200 cursor-pointer"
           >
             Check Now
           </button>
@@ -56,34 +56,34 @@ export default function SyncStatus() {
         <div className="flex items-center gap-2 mt-1">
           {status === "checking" && (
             <>
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-warning opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-warning"></span>
               </span>
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Checking...</span>
+              <span className="text-xs font-semibold text-brand-warning">Checking connection...</span>
             </>
           )}
 
           {status === "connected" && (
             <>
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-success opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-success"></span>
               </span>
-              <span className="text-sm font-medium text-emerald-700 dark:text-emerald-400">Synced</span>
+              <span className="text-xs font-semibold text-brand-success">Synced with Server</span>
             </>
           )}
 
           {status === "disconnected" && (
             <>
-              <span className="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
-              <span className="text-sm font-medium text-rose-700 dark:text-rose-400">Disconnected</span>
+              <span className="h-2 w-2 rounded-full bg-brand-error"></span>
+              <span className="text-xs font-semibold text-brand-error">Disconnected</span>
             </>
           )}
         </div>
 
         {lastCheck && (
-          <p className="text-[10px] text-zinc-400 mt-1">
+          <p className="text-[9px] font-mono text-muted-text mt-1">
             Last checked: {lastCheck.toLocaleTimeString()}
           </p>
         )}
@@ -91,3 +91,4 @@ export default function SyncStatus() {
     </div>
   );
 }
+

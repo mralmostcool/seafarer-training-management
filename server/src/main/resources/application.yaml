@@ -27,24 +27,24 @@ spring:
     location: classpath:db/migration
     schemas: public
 
-  server:
-    port: 8080
-  
-  logging:
-    level:
-      org.flywaydb: DEBUG
-      org.hibernate.SQL: WARN
-      io.github.cdimascio: DEBUG
-  
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: "mapping, health, scalar"
+server:
+  port: 8080
 
-  scalar: 
-    enabled: true
-    url: "/v3/api-docs"
-    theme: "deepSpace"
-    documentDownloadType: "both"
-    actuatorEnabled: true
+logging:
+  level:
+    org.flywaydb: DEBUG
+    org.hibernate.SQL: WARN
+    io.github.cdimascio: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "mapping, health, scalar"
+
+scalar: 
+  enabled: true
+  url: "/v3/api-docs"
+  theme: "deepSpace"
+  documentDownloadType: "both"
+  actuatorEnabled: true

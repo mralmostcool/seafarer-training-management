@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --canvas: #fafafa;
+  --surface-soft: #f4f4f5;
+  --surface-card: #ffffff;
+  --surface-elevated: #fafafa;
+  --hairline: #e4e4e7;
+  --hairline-strong: #d4d4d8;
+  
+  --primary: #faff69;
+  --primary-active: #e6eb52;
+  --primary-disabled: #fef08a;
+  
+  --ink: #0a0a0a;
+  --body-text: #27272a;
+  --body-strong: #09090b;
+  --muted-text: #71717a;
+  --muted-soft: #a1a1aa;
+  
+  --on-primary: #0a0a0a;
+  --on-yellow: #0a0a0a;
+  --accent-interactive: #000000;
+  
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #ca8a04;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html.dark {
+  --canvas: #0a0a0a;
+  --surface-soft: #121212;
+  --surface-card: #1a1a1a;
+  --surface-elevated: #242424;
+  --hairline: #2a2a2a;
+  --hairline-strong: #3a3a3a;
+  
+  --primary: #faff69;
+  --primary-active: #e6eb52;
+  --primary-disabled: #3a3a1f;
+  
+  --ink: #ffffff;
+  --body-text: #cccccc;
+  --body-strong: #e6e6e6;
+  --muted-text: #888888;
+  --muted-soft: #5a5a5a;
+  
+  --on-primary: #0a0a0a;
+  --on-yellow: #0a0a0a;
+  --accent-interactive: #faff69;
+  
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --color-canvas: var(--canvas);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-card: var(--surface-card);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  
+  --color-primary: var(--primary);
+  --color-primary-active: var(--primary-active);
+  --color-primary-disabled: var(--primary-disabled);
+  
+  --color-ink: var(--ink);
+  --color-body-text: var(--body-text);
+  --color-body-strong: var(--body-strong);
+  --color-muted-text: var(--muted-text);
+  --color-muted-soft: var(--muted-soft);
+  
+  --color-on-primary: var(--on-primary);
+  --color-on-yellow: var(--on-yellow);
+  --color-accent-interactive: var(--accent-interactive);
+  
+  --color-brand-success: var(--success);
+  --color-brand-error: var(--error);
+  --color-brand-warning: var(--warning);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--canvas);
+  color: var(--body-text);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+/* Premium Developer-Tool Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hairline-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-soft);
+}
+
+/* Premium Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+

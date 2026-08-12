@@ -74,78 +74,81 @@ export default function RankPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Rank Master</h1>
-          <p className="text-sm text-zinc-500">View and manage seafarer rank classifications.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink font-sans">Rank Master</h1>
+          <p className="text-sm text-muted-text mt-1">View and manage seafarer rank classifications.</p>
         </div>
         <button
           onClick={fetchRanks}
           disabled={loading}
-          className="rounded-md bg-white dark:bg-zinc-800 px-3 py-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-100 shadow-sm ring-1 ring-inset ring-zinc-300 dark:ring-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 disabled:opacity-50 transition-colors"
+          className="inline-flex items-center justify-center rounded-md border border-hairline bg-surface-card hover:bg-surface-soft text-ink px-4 py-2 text-xs font-bold uppercase tracking-wider disabled:opacity-50 transition-all duration-200 cursor-pointer"
         >
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
 
       {loading && ranks.length === 0 ? (
-        <div className="flex items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
-          <p className="text-zinc-500 text-sm">Loading ranks...</p>
+        <div className="flex items-center justify-center h-48 border border-hairline rounded-lg bg-surface-card">
+          <p className="text-muted-text text-sm animate-pulse">Loading ranks database...</p>
         </div>
       ) : error ? (
-        <div className="flex flex-col items-center justify-center h-48 border border-red-200 dark:border-red-900/30 rounded-lg bg-red-50/50 dark:bg-red-950/10 p-6">
-          <p className="text-red-800 dark:text-red-400 text-sm font-medium">Error: {error}</p>
+        <div className="flex flex-col items-center justify-center h-48 border border-brand-error/30 rounded-lg bg-surface-card p-6">
+          <p className="text-brand-error text-sm font-semibold">Error loading data: {error}</p>
           <button
             onClick={fetchRanks}
-            className="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+            className="mt-3 text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider"
           >
             Try Again
           </button>
         </div>
       ) : ranks.length === 0 ? (
-        <div className="flex items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
-          <p className="text-zinc-500 text-sm">No ranks found in database.</p>
+        <div className="flex items-center justify-center h-48 border border-hairline rounded-lg bg-surface-card">
+          <p className="text-muted-text text-sm">No ranks found in database.</p>
         </div>
       ) : (
-        <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950">
-          <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-left text-sm">
-            <thead className="bg-zinc-50 dark:bg-zinc-900 text-xs font-semibold text-zinc-500 uppercase tracking-wider select-none">
-              <tr>
-                <th
-                  onClick={() => handleSort("name")}
-                  className="px-6 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Name</span>
-                    <span className="text-[10px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
-                      {sortField === "name" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
-                    </span>
-                  </div>
-                </th>
-                <th
-                  onClick={() => handleSort("level")}
-                  className="px-6 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Level</span>
-                    <span className="text-[10px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
-                      {sortField === "level" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
-                    </span>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-              {sortedRanks.map((rank) => (
-                <tr key={rank.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-zinc-900 dark:text-zinc-50">{rank.name}</td>
-                  <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">{rank.level}</td>
+        <div className="border border-hairline rounded-lg overflow-hidden bg-surface-card">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-hairline text-left text-sm">
+              <thead className="bg-surface-soft text-xs font-bold text-muted-text uppercase tracking-wider font-mono select-none">
+                <tr>
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="px-6 py-3.5 cursor-pointer hover:bg-surface-card transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Name</span>
+                      <span className="text-[10px] text-muted-text group-hover:text-ink">
+                        {sortField === "name" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
+                      </span>
+                    </div>
+                  </th>
+                  <th
+                    onClick={() => handleSort("level")}
+                    className="px-6 py-3.5 cursor-pointer hover:bg-surface-card transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Level</span>
+                      <span className="text-[10px] text-muted-text group-hover:text-ink">
+                        {sortField === "level" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
+                      </span>
+                    </div>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                {sortedRanks.map((rank) => (
+                  <tr key={rank.id} className="hover:bg-surface-soft/60 transition-colors">
+                    <td className="px-6 py-4 font-bold text-ink font-sans">{rank.name}</td>
+                    <td className="px-6 py-4 font-mono text-muted-text">{rank.level}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
   );
 }
+

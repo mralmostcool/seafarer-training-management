@@ -169,7 +169,7 @@ export default function EnrollmentPage() {
     setDropdownsLoading(true);
     setDropdownsError(null);
     try {
-      // Fetch pre-sea courses (all or active)
+      // Fetch pre-sea courses
       const coursesRes = await fetch("http://localhost:8080/api/crud/pre-sea-courses");
       if (!coursesRes.ok) {
         throw new Error(`Failed to fetch courses list (HTTP ${coursesRes.status})`);
@@ -406,22 +406,23 @@ export default function EnrollmentPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Course Enrollment</h1>
-          <p className="text-sm text-zinc-500">View and manage seafarer course enrollment program entries.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink font-sans">Course Enrollment</h1>
+          <p className="text-sm text-muted-text mt-1">View and manage seafarer course enrollment program entries.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={openAddPanel}
-            className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+            className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary hover:bg-primary-active px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer"
           >
             Enroll Student
           </button>
           <button
             onClick={() => fetchRecords(true)}
             disabled={loading}
-            className="rounded-md bg-white dark:bg-zinc-800 px-3 py-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-100 shadow-sm ring-1 ring-inset ring-zinc-300 dark:ring-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 disabled:opacity-50 transition-colors"
+            className="inline-flex items-center justify-center rounded-md border border-hairline bg-surface-card hover:bg-surface-soft text-ink px-4 py-2 text-xs font-bold uppercase tracking-wider disabled:opacity-50 transition-all duration-200 cursor-pointer"
           >
             {loading ? "Refreshing..." : "Refresh"}
           </button>
@@ -429,18 +430,18 @@ export default function EnrollmentPage() {
       </div>
 
       {/* Search and Filters row */}
-      <div className="bg-white dark:bg-zinc-950 p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm select-none">
+      <div className="bg-surface-card p-4 border border-hairline rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
         <form onSubmit={handleSearchSubmit} className="flex-1 flex items-center gap-2">
           <input
             type="text"
             placeholder="Search by student name, INDOS number or course name..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-1.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="flex-1 rounded-md border border-hairline bg-surface-soft px-3 py-2 text-sm text-ink placeholder:text-muted-text focus:outline-none focus:ring-1 focus:ring-primary"
           />
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+            className="rounded-md bg-primary text-on-primary hover:bg-primary-active px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer"
           >
             Search
           </button>
@@ -448,11 +449,11 @@ export default function EnrollmentPage() {
 
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-550 dark:text-zinc-400 font-medium">Course:</span>
+            <span className="text-xs font-bold text-muted-text uppercase tracking-wider font-mono">Course:</span>
             <select
               value={filterCourseId}
               onChange={(e) => handleCourseFilterChange(e.target.value)}
-              className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-905 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+              className="rounded-md border border-hairline bg-surface-soft px-2 py-1.5 text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer font-sans"
             >
               <option value="">All Courses</option>
               {courses.map((course) => (
@@ -464,11 +465,11 @@ export default function EnrollmentPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-550 dark:text-zinc-400 font-medium">Student:</span>
+            <span className="text-xs font-bold text-muted-text uppercase tracking-wider font-mono">Student:</span>
             <select
               value={filterIndosId}
               onChange={(e) => handleIndosFilterChange(e.target.value)}
-              className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-905 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+              className="rounded-md border border-hairline bg-surface-soft px-2 py-1.5 text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer font-sans"
             >
               <option value="">All Seafarers</option>
               {seafarers.map((s) => (
@@ -480,11 +481,11 @@ export default function EnrollmentPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-550 dark:text-zinc-400 font-medium">Status:</span>
+            <span className="text-xs font-bold text-muted-text uppercase tracking-wider font-mono">Status:</span>
             <select
               value={filterStatus}
               onChange={(e) => handleStatusFilterChange(e.target.value)}
-              className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-905 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+              className="rounded-md border border-hairline bg-surface-soft px-2 py-1.5 text-xs text-ink focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer font-sans"
             >
               <option value="">All Statuses</option>
               <option value="ENROLLED">Enrolled</option>
@@ -497,7 +498,7 @@ export default function EnrollmentPage() {
             <button
               type="button"
               onClick={handleClearFilters}
-              className="text-xs font-semibold text-rose-600 dark:text-rose-450 hover:text-rose-500 hover:underline px-2 py-1.5 rounded-md hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all"
+              className="text-xs font-bold text-brand-error hover:underline px-2 py-1.5 transition-all cursor-pointer font-mono uppercase tracking-wider"
             >
               Clear Filters
             </button>
@@ -505,145 +506,148 @@ export default function EnrollmentPage() {
         </div>
       </div>
 
+      {/* Main Table */}
       {loading && records.length === 0 ? (
-        <div className="flex items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
-          <p className="text-zinc-500 text-sm">Loading enrollment records...</p>
+        <div className="flex items-center justify-center h-48 border border-hairline rounded-lg bg-surface-card">
+          <p className="text-muted-text text-sm animate-pulse">Loading enrollment records...</p>
         </div>
       ) : error ? (
-        <div className="flex flex-col items-center justify-center h-48 border border-red-200 dark:border-red-900/30 rounded-lg bg-red-50/50 dark:bg-red-950/10 p-6">
-          <p className="text-red-800 dark:text-red-400 text-sm font-medium">Error: {error}</p>
+        <div className="flex flex-col items-center justify-center h-48 border border-brand-error/30 rounded-lg bg-surface-card p-6">
+          <p className="text-brand-error text-sm font-semibold">Error: {error}</p>
           <button
             onClick={() => fetchRecords(false)}
-            className="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+            className="mt-3 text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider cursor-pointer"
           >
             Try Again
           </button>
         </div>
       ) : records.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-48 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950 p-6 text-center">
-          <p className="text-zinc-500 text-sm">No enrollment records found matching filters.</p>
+        <div className="flex flex-col items-center justify-center h-48 border border-hairline rounded-lg bg-surface-card p-6 text-center">
+          <p className="text-muted-text text-sm">No enrollment records found matching filters.</p>
           {(searchQuery || filterCourseId || filterIndosId || filterStatus) && (
             <button
               onClick={handleClearFilters}
-              className="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+              className="mt-3 text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider cursor-pointer"
             >
               Clear search filters
             </button>
           )}
         </div>
       ) : (
-        <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950 shadow-sm">
-          <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-left text-sm">
-            <thead className="bg-zinc-50 dark:bg-zinc-900 text-xs font-semibold text-zinc-500 uppercase tracking-wider select-none">
-              <tr>
-                <th
-                  onClick={() => handleSort("preSeaCourse")}
-                  className="px-6 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Course Program</span>
-                    <span className="text-[10px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
-                      {sortField === "preSeaCourse" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
-                    </span>
-                  </div>
-                </th>
-                <th
-                  onClick={() => handleSort("indosMaster")}
-                  className="px-6 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Seafarer (INDOS)</span>
-                    <span className="text-[10px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
-                      {sortField === "indosMaster" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
-                    </span>
-                  </div>
-                </th>
-                <th
-                  onClick={() => handleSort("status")}
-                  className="px-6 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Status</span>
-                    <span className="text-[10px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
-                      {sortField === "status" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
-                    </span>
-                  </div>
-                </th>
-                <th
-                  onClick={() => handleSort("createdAt")}
-                  className="px-6 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Enrolled On</span>
-                    <span className="text-[10px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
-                      {sortField === "createdAt" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
-                    </span>
-                  </div>
-                </th>
-                <th className="px-6 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-              {records.map((record) => (
-                <tr key={record.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-50">{record.preSeaCourse.name}</div>
-                    <div className="text-xs text-zinc-500 font-mono">Starts {record.preSeaCourse.startDate}</div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-50">{record.indosMaster.firstName}</div>
-                    <div className="text-xs text-zinc-500 font-mono">INDOS: {record.indosMaster.indos} ({record.indosMaster.rank?.name || "No Rank"})</div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ring-1 ring-inset ${
-                      record.status === "COMPLETED"
-                        ? "bg-green-50 text-green-700 ring-green-650/10 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20"
-                        : record.status === "CANCELLED"
-                        ? "bg-rose-50 text-rose-700 ring-rose-650/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20"
-                        : "bg-blue-50 text-blue-700 ring-blue-650/10 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20"
-                    }`}>
-                      {record.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400 font-mono text-xs">
-                    {new Date(record.createdAt).toLocaleDateString(undefined, { dateStyle: "short" })}
-                  </td>
-                  <td className="px-6 py-4 text-right flex items-center justify-end gap-3.5">
-                    <Link
-                      href={`/enrollment/${record.id}`}
-                      className="text-sm font-semibold text-zinc-550 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:underline"
-                    >
-                      View Details
-                    </Link>
-                    <button
-                      onClick={() => openEditPanel(record)}
-                      className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </button>
-                  </td>
+        <div className="border border-hairline rounded-lg overflow-hidden bg-surface-card shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-hairline text-left text-sm">
+              <thead className="bg-surface-soft text-xs font-bold text-muted-text uppercase tracking-wider font-mono select-none">
+                <tr>
+                  <th
+                    onClick={() => handleSort("preSeaCourse")}
+                    className="px-6 py-3.5 cursor-pointer hover:bg-surface-card transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Course Program</span>
+                      <span className="text-[10px] text-muted-text group-hover:text-ink">
+                        {sortField === "preSeaCourse" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
+                      </span>
+                    </div>
+                  </th>
+                  <th
+                    onClick={() => handleSort("indosMaster")}
+                    className="px-6 py-3.5 cursor-pointer hover:bg-surface-card transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Seafarer (INDOS)</span>
+                      <span className="text-[10px] text-muted-text group-hover:text-ink">
+                        {sortField === "indosMaster" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
+                      </span>
+                    </div>
+                  </th>
+                  <th
+                    onClick={() => handleSort("status")}
+                    className="px-6 py-3.5 cursor-pointer hover:bg-surface-card transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Status</span>
+                      <span className="text-[10px] text-muted-text group-hover:text-ink">
+                        {sortField === "status" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
+                      </span>
+                    </div>
+                  </th>
+                  <th
+                    onClick={() => handleSort("createdAt")}
+                    className="px-6 py-3.5 cursor-pointer hover:bg-surface-card transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Enrolled On</span>
+                      <span className="text-[10px] text-muted-text group-hover:text-ink">
+                        {sortField === "createdAt" ? (sortOrder === "asc" ? "▲" : "▼") : "↕"}
+                      </span>
+                    </div>
+                  </th>
+                  <th className="px-6 py-3.5 text-right font-mono uppercase tracking-wider text-xs">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                {records.map((record) => (
+                  <tr key={record.id} className="hover:bg-surface-soft/60 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="font-bold text-ink font-sans">{record.preSeaCourse.name}</div>
+                      <div className="text-xs text-muted-text font-mono">Starts {record.preSeaCourse.startDate}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="font-bold text-ink font-sans">{record.indosMaster.firstName}</div>
+                      <div className="text-xs text-muted-text font-mono">INDOS: {record.indosMaster.indos} ({record.indosMaster.rank?.name || "No Rank"})</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset ${
+                        record.status === "COMPLETED"
+                          ? "bg-brand-success/15 text-brand-success ring-brand-success/30"
+                          : record.status === "CANCELLED"
+                          ? "bg-brand-error/15 text-brand-error ring-brand-error/30"
+                          : "bg-accent-interactive/15 text-accent-interactive ring-accent-interactive/30"
+                      }`}>
+                        {record.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-mono text-xs text-muted-text">
+                      {new Date(record.createdAt).toLocaleDateString(undefined, { dateStyle: "short" })}
+                    </td>
+                    <td className="px-6 py-4 text-right flex items-center justify-end gap-4">
+                      <Link
+                        href={`/enrollment/${record.id}`}
+                        className="text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider"
+                      >
+                        View Details
+                      </Link>
+                      <button
+                        onClick={() => openEditPanel(record)}
+                        className="text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider cursor-pointer"
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           {/* Pagination Footer */}
-          <div className="bg-zinc-50 dark:bg-zinc-900 px-6 py-4 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800 text-sm select-none text-zinc-550 dark:text-zinc-455">
-            <div className="flex items-center gap-5">
+          <div className="bg-surface-soft px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-hairline text-xs font-mono text-muted-text select-none">
+            <div className="flex flex-wrap items-center gap-5">
               <span>
                 Showing {totalElements === 0 ? 0 : currentPage * pageSize + 1} to{" "}
                 {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements} entries
               </span>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs">Show:</span>
+                <span>Show:</span>
                 <select
                   value={pageSize}
                   onChange={(e) => {
                     setPageSize(Number(e.target.value));
                     setCurrentPage(0);
                   }}
-                  className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-2 py-1 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                  className="rounded-md border border-hairline bg-surface-card px-2 py-1 text-xs text-ink focus:outline-none cursor-pointer"
                 >
                   <option value={10}>10</option>
                   <option value={20}>20</option>
@@ -652,23 +656,23 @@ export default function EnrollmentPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 self-end sm:self-auto">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
                 disabled={currentPage === 0}
-                className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-zinc-750 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-50 transition-colors"
+                className="rounded-md border border-hairline bg-surface-card px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-ink hover:bg-surface-soft disabled:opacity-40 transition-colors cursor-pointer"
               >
-                Previous
+                Prev
               </button>
-
-              <span className="text-xs text-zinc-550 dark:text-zinc-400 px-1 font-medium">
-                Page {totalPages === 0 ? 0 : currentPage + 1} of {totalPages}
+              
+              <span className="px-1">
+                Page {totalPages === 0 ? 0 : currentPage + 1} / {totalPages}
               </span>
 
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={currentPage >= totalPages - 1 || totalPages === 0}
-                className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-zinc-750 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-50 transition-colors"
+                className="rounded-md border border-hairline bg-surface-card px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-ink hover:bg-surface-soft disabled:opacity-40 transition-colors cursor-pointer"
               >
                 Next
               </button>
@@ -686,44 +690,44 @@ export default function EnrollmentPage() {
         {/* Backdrop overlay */}
         <div
           onClick={closePanel}
-          className="absolute inset-0 bg-black/45 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/45 backdrop-blur-xs transition-opacity"
         />
 
         {/* Panel Body */}
         <div
-          className={`relative w-full max-w-md bg-white dark:bg-zinc-950 h-full shadow-2xl border-l border-zinc-200 dark:border-zinc-800 flex flex-col transition-transform duration-300 ease-in-out ${
+          className={`relative w-full max-w-md bg-surface-card h-full shadow-2xl border-l border-hairline flex flex-col transition-transform duration-350 ease-in-out ${
             panelMode ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-zinc-150 dark:border-zinc-800 p-6">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+          <div className="flex items-center justify-between border-b border-hairline p-6 bg-surface-soft">
+            <h2 className="text-lg font-bold text-ink font-sans tracking-tight">
               {panelMode === "edit" ? "Edit Course Enrollment" : "Enroll Student"}
             </h2>
             <button
               type="button"
               onClick={closePanel}
-              className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 text-lg font-medium p-1"
+              className="text-muted-text hover:text-ink text-sm font-bold p-1 cursor-pointer font-mono"
             >
-              ✕
+              [ESC] ✕
             </button>
           </div>
 
           {/* Form Content */}
-          <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between p-6 overflow-y-auto">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between p-6 overflow-y-auto bg-surface-card">
             <div className="space-y-5">
               {submitError && (
-                <div className="rounded bg-rose-50 dark:bg-rose-950/20 p-3 text-xs text-rose-700 dark:text-rose-450 border border-rose-100 dark:border-rose-900/30">
+                <div className="rounded border border-brand-error/20 bg-brand-error/10 p-3 text-xs text-brand-error font-semibold font-mono">
                   {submitError}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wide">Pre-Sea Course Program</label>
+                <label className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Pre-Sea Course Program</label>
                 {dropdownsLoading ? (
-                  <p className="text-xs text-zinc-500 mt-2">Loading courses list...</p>
+                  <p className="text-xs text-muted-text animate-pulse mt-2 font-mono uppercase tracking-wider">Loading courses list...</p>
                 ) : dropdownsError ? (
-                  <p className="text-xs text-red-500 mt-2">Failed to load courses list.</p>
+                  <p className="text-xs text-brand-error font-semibold mt-2">Failed to load courses list.</p>
                 ) : (
                   <div className="relative mt-1">
                     <div className="relative flex items-center">
@@ -740,13 +744,13 @@ export default function EnrollmentPage() {
                         placeholder="Type to search course..."
                         className={`block w-full rounded-md border ${
                           formCourseId 
-                            ? "border-green-500 focus:ring-green-550 focus:border-green-550 dark:border-green-600" 
-                            : "border-zinc-300 dark:border-zinc-700 focus:ring-blue-500 focus:border-blue-500"
-                        } bg-white dark:bg-zinc-900 pl-3 pr-16 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2`}
+                            ? "border-brand-success focus:ring-brand-success focus:border-brand-success" 
+                            : "border-hairline bg-surface-soft text-ink focus:ring-primary"
+                        } pl-3 pr-16 py-2 text-sm text-ink focus:outline-none focus:ring-1`}
                       />
                       <div className="absolute right-3 flex items-center gap-1.5">
                         {formCourseId && (
-                          <span className="text-[10px] font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 px-1.5 py-0.5 rounded">
+                          <span className="text-[9px] font-bold text-brand-success bg-brand-success/15 px-1.5 py-0.5 rounded font-mono uppercase">
                             Selected
                           </span>
                         )}
@@ -758,7 +762,7 @@ export default function EnrollmentPage() {
                               setFormCourseId("");
                               setCourseDropdownOpen(true);
                             }}
-                            className="text-zinc-400 hover:text-zinc-650 dark:hover:text-zinc-200 text-xs font-bold p-1"
+                            className="text-muted-text hover:text-ink text-xs font-bold p-1 cursor-pointer font-mono"
                           >
                             ✕
                           </button>
@@ -769,9 +773,9 @@ export default function EnrollmentPage() {
                     {courseDropdownOpen && (
                       <>
                         <div className="fixed inset-0 z-10" onClick={() => setCourseDropdownOpen(false)} />
-                        <ul className="absolute z-20 w-full mt-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                        <ul className="absolute z-20 w-full mt-1 bg-surface-card border border-hairline rounded-md shadow-lg max-h-60 overflow-y-auto">
                           {filteredCourses.length === 0 ? (
-                            <li className="px-3 py-2 text-sm text-zinc-500">No matching courses found</li>
+                            <li className="px-3 py-2 text-xs text-muted-text font-mono">No matching courses found</li>
                           ) : (
                             filteredCourses.map((c) => (
                               <li
@@ -781,7 +785,7 @@ export default function EnrollmentPage() {
                                   setCourseSearchInput(c.name);
                                   setCourseDropdownOpen(false);
                                 }}
-                                className="px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-850 cursor-pointer select-none"
+                                className="px-3 py-2 text-sm text-body-text hover:bg-surface-soft hover:text-ink cursor-pointer select-none"
                               >
                                 {c.name} {c.isActive ? "" : "(Inactive)"}
                               </li>
@@ -795,11 +799,11 @@ export default function EnrollmentPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wide">Student / Seafarer (INDOS)</label>
+                <label className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Student / Seafarer (INDOS)</label>
                 {dropdownsLoading ? (
-                  <p className="text-xs text-zinc-500 mt-2">Loading students list...</p>
+                  <p className="text-xs text-muted-text animate-pulse mt-2 font-mono uppercase tracking-wider">Loading students list...</p>
                 ) : dropdownsError ? (
-                  <p className="text-xs text-red-500 mt-2">Failed to load seafarers list.</p>
+                  <p className="text-xs text-brand-error font-semibold mt-2">Failed to load seafarers list.</p>
                 ) : (
                   <div className="relative mt-1">
                     <div className="relative flex items-center">
@@ -816,13 +820,13 @@ export default function EnrollmentPage() {
                         placeholder="Type to search seafarer..."
                         className={`block w-full rounded-md border ${
                           formIndosId 
-                            ? "border-green-500 focus:ring-green-550 focus:border-green-550 dark:border-green-600" 
-                            : "border-zinc-300 dark:border-zinc-700 focus:ring-blue-500 focus:border-blue-500"
-                        } bg-white dark:bg-zinc-900 pl-3 pr-16 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2`}
+                            ? "border-brand-success focus:ring-brand-success focus:border-brand-success" 
+                            : "border-hairline bg-surface-soft text-ink focus:ring-primary"
+                        } pl-3 pr-16 py-2 text-sm text-ink focus:outline-none focus:ring-1`}
                       />
                       <div className="absolute right-3 flex items-center gap-1.5">
                         {formIndosId && (
-                          <span className="text-[10px] font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 px-1.5 py-0.5 rounded">
+                          <span className="text-[9px] font-bold text-brand-success bg-brand-success/15 px-1.5 py-0.5 rounded font-mono uppercase">
                             Selected
                           </span>
                         )}
@@ -834,7 +838,7 @@ export default function EnrollmentPage() {
                               setFormIndosId("");
                               setSeafarerDropdownOpen(true);
                             }}
-                            className="text-zinc-400 hover:text-zinc-655 dark:hover:text-zinc-200 text-xs font-bold p-1"
+                            className="text-muted-text hover:text-ink text-xs font-bold p-1 cursor-pointer font-mono"
                           >
                             ✕
                           </button>
@@ -845,9 +849,9 @@ export default function EnrollmentPage() {
                     {seafarerDropdownOpen && (
                       <>
                         <div className="fixed inset-0 z-10" onClick={() => setSeafarerDropdownOpen(false)} />
-                        <ul className="absolute z-20 w-full mt-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                        <ul className="absolute z-20 w-full mt-1 bg-surface-card border border-hairline rounded-md shadow-lg max-h-60 overflow-y-auto">
                           {filteredSeafarers.length === 0 ? (
-                            <li className="px-3 py-2 text-sm text-zinc-550">No matching seafarers found</li>
+                            <li className="px-3 py-2 text-xs text-muted-text font-mono">No matching seafarers found</li>
                           ) : (
                             filteredSeafarers.map((s) => (
                               <li
@@ -857,10 +861,10 @@ export default function EnrollmentPage() {
                                   setSeafarerSearchInput(`${s.firstName} (INDOS: ${s.indos})`);
                                   setSeafarerDropdownOpen(false);
                                 }}
-                                className="px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-850 cursor-pointer select-none"
+                                className="px-3 py-2 hover:bg-surface-soft cursor-pointer select-none text-body-text hover:text-ink"
                               >
-                                <div className="font-semibold">{s.firstName}</div>
-                                <div className="text-xs text-zinc-500 font-mono">INDOS: {s.indos} {s.rank ? `• ${s.rank.name}` : ""}</div>
+                                <div className="font-bold text-sm">{s.firstName}</div>
+                                <div className="text-xs text-muted-text font-mono">INDOS: {s.indos} {s.rank ? `• ${s.rank.name}` : ""}</div>
                               </li>
                             ))
                           )}
@@ -872,12 +876,12 @@ export default function EnrollmentPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wide">Status</label>
+                <label className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Status</label>
                 <select
                   required
                   value={formStatus}
                   onChange={(e) => setFormStatus(e.target.value as EnrollmentStatus)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                  className="mt-1 block w-full rounded-md border border-hairline bg-surface-soft px-3 py-2 text-sm text-ink focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer font-sans"
                 >
                   <option value="ENROLLED">Enrolled</option>
                   <option value="COMPLETED">Completed</option>
@@ -886,18 +890,18 @@ export default function EnrollmentPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wide">Remarks / Comments</label>
+                <label className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Remarks / Comments</label>
                 <textarea
                   value={formRemarks}
                   onChange={(e) => setFormRemarks(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[90px]"
-                  placeholder="e.g. Approved entry with high priority..."
+                  className="mt-1 block w-full rounded-md border border-hairline bg-surface-soft px-3 py-2 text-sm text-ink focus:outline-none focus:ring-1 focus:ring-primary min-h-[90px]"
+                  placeholder="Remarks or remarks comments..."
                 />
               </div>
             </div>
 
             {/* Footer with buttons & optional consent */}
-            <div className="border-t border-zinc-150 dark:border-zinc-800 pt-4 mt-8 space-y-4">
+            <div className="border-t border-hairline pt-4 mt-8 space-y-4">
               {panelMode === "edit" && (
                 <div className="flex items-start gap-2.5">
                   <input
@@ -906,9 +910,9 @@ export default function EnrollmentPage() {
                     required
                     checked={consentChecked}
                     onChange={(e) => setConsentChecked(e.target.checked)}
-                    className="h-4 w-4 mt-0.5 rounded border-zinc-300 dark:border-zinc-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    className="h-4 w-4 mt-0.5 rounded border-hairline bg-surface-soft text-primary focus:ring-primary cursor-pointer"
                   />
-                  <label htmlFor="consentChecked" className="text-xs font-medium text-zinc-655 dark:text-zinc-400 select-none cursor-pointer leading-relaxed">
+                  <label htmlFor="consentChecked" className="text-xs font-semibold text-muted-text select-none cursor-pointer leading-relaxed">
                     I confirm that the modified details are correct and should be saved.
                   </label>
                 </div>
@@ -920,7 +924,7 @@ export default function EnrollmentPage() {
                     type="button"
                     onClick={handleDelete}
                     disabled={submitLoading}
-                    className="rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 disabled:opacity-50 transition-colors"
+                    className="rounded-md bg-brand-error text-white hover:opacity-90 px-4 py-2 text-xs font-bold uppercase tracking-wider disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     Delete Record
                   </button>
@@ -932,14 +936,14 @@ export default function EnrollmentPage() {
                   <button
                     type="button"
                     onClick={closePanel}
-                    className="rounded-md border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                    className="rounded-md border border-hairline bg-surface-soft px-4 py-2 text-xs font-bold uppercase tracking-wider text-ink hover:bg-hairline/10 transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitLoading || dropdownsLoading || !!dropdownsError || (panelMode === "edit" && !consentChecked)}
-                    className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+                    className="rounded-md bg-primary text-on-primary hover:bg-primary-active px-4 py-2 text-xs font-bold uppercase tracking-wider disabled:opacity-40 transition-colors cursor-pointer"
                   >
                     {submitLoading
                       ? "Saving..."
@@ -957,20 +961,20 @@ export default function EnrollmentPage() {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`p-4 rounded-lg border shadow-lg flex items-start justify-between transition-all duration-300 transform translate-y-0 ${
+            className={`p-4 rounded-md border shadow-lg flex items-start justify-between transition-all duration-300 transform translate-y-0 ${
               toast.type === "success"
-                ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/90 dark:border-emerald-900/50 dark:text-emerald-300"
+                ? "bg-surface-card border-brand-success text-brand-success"
                 : toast.type === "error"
-                ? "bg-rose-50 border-rose-200 text-rose-800 dark:bg-rose-950/90 dark:border-rose-900/50 dark:text-rose-300"
+                ? "bg-surface-card border-brand-error text-brand-error"
                 : toast.type === "warning"
-                ? "bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950/90 dark:border-amber-900/50 dark:text-amber-300"
-                : "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950/90 dark:border-blue-900/50 dark:text-blue-300"
+                ? "bg-surface-card border-brand-warning text-brand-warning"
+                : "bg-surface-card border-hairline-strong text-ink"
             }`}
           >
-            <span className="text-sm font-medium pr-4">{toast.message}</span>
+            <span className="text-xs font-semibold pr-4">{toast.message}</span>
             <button
               onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-              className="text-xs font-bold opacity-60 hover:opacity-100 p-0.5 leading-none"
+              className="text-xs font-bold opacity-60 hover:opacity-100 p-0.5 leading-none cursor-pointer"
             >
               ✕
             </button>

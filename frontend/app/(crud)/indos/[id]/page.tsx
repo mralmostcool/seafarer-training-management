@@ -105,17 +105,17 @@ export default function SeafarerDetailPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
-        <p className="text-zinc-500 text-sm animate-pulse">Loading seafarer details profile...</p>
+      <div className="flex items-center justify-center h-64 border border-hairline rounded-lg bg-surface-card">
+        <p className="text-muted-text text-sm animate-pulse">Loading seafarer details profile...</p>
       </div>
     );
   }
 
   if (error || !seafarer) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 border border-red-200 dark:border-red-900/30 rounded-lg bg-red-50/50 dark:bg-red-950/10 p-6">
-        <p className="text-red-800 dark:text-red-400 text-sm font-medium">Error: {error || "Profile not found"}</p>
-        <Link href="/indos" className="mt-4 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+      <div className="flex flex-col items-center justify-center h-64 border border-brand-error/30 rounded-lg bg-surface-card p-6">
+        <p className="text-brand-error text-sm font-semibold">Error loading profile: {error || "Profile not found"}</p>
+        <Link href="/indos" className="mt-4 text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider font-mono">
           Back to INDOS Master list
         </Link>
       </div>
@@ -128,54 +128,54 @@ export default function SeafarerDetailPage({ params }: PageProps) {
       <div>
         <Link 
           href="/indos" 
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-text hover:text-ink transition-colors uppercase tracking-wider font-mono"
         >
           ← Back to INDOS Master
         </Link>
       </div>
 
       {/* Profile Summary Card */}
-      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start">
+      <div className="bg-surface-card border border-hairline rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start">
         {/* Large Initials Badge */}
-        <div className="h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center text-blue-700 dark:text-blue-400 text-2xl font-bold uppercase select-none ring-4 ring-blue-50 dark:ring-blue-900/20 shrink-0">
+        <div className="h-16 w-16 rounded-full bg-surface-soft border border-hairline flex items-center justify-center text-accent-interactive text-2xl font-bold uppercase select-none ring-4 ring-hairline/25 shrink-0 font-sans">
           {seafarer.firstName.charAt(0)}
         </div>
 
         {/* Details Grid */}
         <div className="flex-1 space-y-4 w-full">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">{seafarer.firstName}</h1>
-            <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ring-1 ring-inset ${
+            <h1 className="text-2xl font-bold text-ink tracking-tight font-sans">{seafarer.firstName}</h1>
+            <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset ${
               seafarer.isActive
-                ? "bg-green-50 text-green-700 ring-green-650/10 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20"
-                : "bg-zinc-50 text-zinc-600 ring-zinc-500/10 dark:bg-zinc-500/10 dark:text-zinc-400 dark:ring-zinc-500/20"
+                ? "bg-brand-success/15 text-brand-success ring-brand-success/30"
+                : "bg-muted-soft/20 text-muted-text ring-hairline-strong"
             }`}>
               {seafarer.isActive ? "Active Seafarer" : "Inactive"}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2 border-t border-zinc-100 dark:border-zinc-900 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-hairline text-sm">
             <div>
-              <span className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider">INDOS Number</span>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100 font-mono">{seafarer.indos}</span>
+              <span className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">INDOS Number</span>
+              <span className="font-bold text-ink font-mono text-xs">{seafarer.indos}</span>
             </div>
             <div>
-              <span className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Assigned Rank</span>
-              <span className="font-semibold text-zinc-905 dark:text-zinc-200">
+              <span className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Assigned Rank</span>
+              <span className="font-bold text-ink font-sans text-xs">
                 {seafarer.rank ? `${seafarer.rank.name} (Level ${seafarer.rank.level})` : "None"}
               </span>
             </div>
             <div>
-              <span className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Record Registered</span>
-              <span className="text-zinc-600 dark:text-zinc-400 text-xs">
+              <span className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Record Registered</span>
+              <span className="text-muted-text text-xs font-mono">
                 {new Date(seafarer.createdAt).toLocaleDateString(undefined, {
                   dateStyle: "medium",
                 })}
               </span>
             </div>
             <div>
-              <span className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Last Modified</span>
-              <span className="text-zinc-600 dark:text-zinc-400 text-xs">
+              <span className="block text-[10px] font-bold text-muted-text uppercase tracking-wider font-mono">Last Modified</span>
+              <span className="text-muted-text text-xs font-mono">
                 {new Date(seafarer.updatedAt).toLocaleDateString(undefined, {
                   dateStyle: "medium",
                 })}
@@ -186,16 +186,16 @@ export default function SeafarerDetailPage({ params }: PageProps) {
       </div>
 
       {/* Tabs Menu Navigation */}
-      <div className="border-b border-zinc-200 dark:border-zinc-800">
+      <div className="border-b border-hairline">
         <nav className="flex space-x-6" aria-label="Tabs">
           {(["enrolled_courses", "beta", "gamma"] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 text-sm font-semibold border-b-2 uppercase tracking-wider select-none transition-all ${
+              className={`pb-3 text-xs font-bold border-b-2 uppercase tracking-wider select-none transition-all font-mono cursor-pointer ${
                 activeTab === tab
-                  ? "border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500"
-                  : "border-transparent text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                  ? "border-primary text-accent-interactive"
+                  : "border-transparent text-muted-text hover:text-ink"
               }`}
             >
               {tab.replace("_", " ")}
@@ -205,77 +205,79 @@ export default function SeafarerDetailPage({ params }: PageProps) {
       </div>
 
       {/* Tab Panel Content Area */}
-      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm min-h-[350px]">
+      <div className="bg-surface-card border border-hairline rounded-xl p-6 shadow-sm min-h-[350px]">
         {activeTab === "enrolled_courses" ? (
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Enrolled Course Programs</h3>
+            <h3 className="text-sm font-bold text-ink uppercase tracking-wider font-mono">Enrolled Course Programs</h3>
             
             {enrollmentsLoading ? (
-              <p className="text-sm text-zinc-500 animate-pulse">Loading course enrollment list...</p>
+              <p className="text-xs text-muted-text animate-pulse font-mono uppercase tracking-wider py-8 text-center">Loading course enrollment list...</p>
             ) : enrollmentsError ? (
-              <p className="text-sm text-red-500">Error: {enrollmentsError}</p>
+              <p className="text-sm text-brand-error font-semibold py-8 text-center">Error: {enrollmentsError}</p>
             ) : enrollments.length === 0 ? (
-              <p className="text-sm text-zinc-500 italic py-8 text-center">No course enrollments found for this seafarer.</p>
+              <p className="text-xs text-muted-text italic py-8 text-center font-mono uppercase tracking-wider">No course enrollments found for this seafarer.</p>
             ) : (
-              <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950">
-                <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-left text-sm">
-                  <thead className="bg-zinc-50 dark:bg-zinc-900 text-xs font-semibold text-zinc-500 uppercase tracking-wider select-none">
-                    <tr>
-                      <th className="px-6 py-3">Course Program</th>
-                      <th className="px-6 py-3">Start Date</th>
-                      <th className="px-6 py-3">Status</th>
-                      <th className="px-6 py-3">Remarks</th>
-                      <th className="px-6 py-3">Date Enrolled</th>
-                      <th className="px-6 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                    {enrollments.map((record) => (
-                      <tr key={record.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-zinc-900 dark:text-zinc-50">
-                          {record.preSeaCourse.name}
-                        </td>
-                        <td className="px-6 py-4 font-mono text-xs text-zinc-650 dark:text-zinc-400">
-                          {record.preSeaCourse.startDate}
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ring-1 ring-inset ${
-                            record.status === "COMPLETED"
-                              ? "bg-green-50 text-green-700 ring-green-650/10 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20"
-                              : record.status === "CANCELLED"
-                              ? "bg-rose-50 text-rose-700 ring-rose-650/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20"
-                              : "bg-blue-50 text-blue-700 ring-blue-650/10 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20"
-                          }`}>
-                            {record.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-xs italic text-zinc-600 dark:text-zinc-400">
-                          {record.remarks || "—"}
-                        </td>
-                        <td className="px-6 py-4 font-mono text-xs text-zinc-500 dark:text-zinc-400">
-                          {new Date(record.createdAt).toLocaleDateString(undefined, { dateStyle: "short" })}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <Link
-                            href={`/enrollment/${record.id}`}
-                            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline"
-                          >
-                            View Details
-                          </Link>
-                        </td>
+              <div className="border border-hairline rounded-lg overflow-hidden bg-surface-card">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-hairline text-left text-sm">
+                    <thead className="bg-surface-soft text-xs font-bold text-muted-text uppercase tracking-wider font-mono select-none">
+                      <tr>
+                        <th className="px-6 py-3.5">Course Program</th>
+                        <th className="px-6 py-3.5">Start Date</th>
+                        <th className="px-6 py-3.5">Status</th>
+                        <th className="px-6 py-3.5">Remarks</th>
+                        <th className="px-6 py-3.5">Date Enrolled</th>
+                        <th className="px-6 py-3.5 text-right font-mono">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-hairline">
+                      {enrollments.map((record) => (
+                        <tr key={record.id} className="hover:bg-surface-soft/60 transition-colors">
+                          <td className="px-6 py-4 font-bold text-ink font-sans">
+                            {record.preSeaCourse.name}
+                          </td>
+                          <td className="px-6 py-4 font-mono text-xs text-muted-text">
+                            {record.preSeaCourse.startDate}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset ${
+                              record.status === "COMPLETED"
+                                ? "bg-brand-success/15 text-brand-success ring-brand-success/30"
+                                : record.status === "CANCELLED"
+                                ? "bg-brand-error/15 text-brand-error ring-brand-error/30"
+                                : "bg-accent-interactive/15 text-accent-interactive ring-accent-interactive/30"
+                            }`}>
+                              {record.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-xs italic text-body-text">
+                            {record.remarks || "—"}
+                          </td>
+                          <td className="px-6 py-4 font-mono text-xs text-muted-text">
+                            {new Date(record.createdAt).toLocaleDateString(undefined, { dateStyle: "short" })}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <Link
+                              href={`/enrollment/${record.id}`}
+                              className="text-xs font-bold text-accent-interactive hover:underline uppercase tracking-wider"
+                            >
+                              View Details
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="flex items-center justify-center min-h-[350px] relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-50/20 via-transparent to-zinc-50/10 dark:from-zinc-900/10 dark:to-zinc-900/5 pointer-events-none" />
-            <h3 className="text-7xl md:text-9xl font-black tracking-widest uppercase select-none text-zinc-150 dark:text-zinc-850/80 transition-all duration-500 group-hover:scale-105">
-              {activeTab}
-            </h3>
+          <div className="flex flex-col items-center justify-center min-h-[300px] border border-dashed border-hairline rounded-lg p-12 text-center">
+            <span className="text-2xl font-black tracking-widest uppercase select-none text-hairline-strong font-mono">
+              {activeTab} PANEL
+            </span>
+            <p className="text-xs text-muted-text font-mono mt-2 uppercase tracking-wide">Developer chrome placeholder</p>
           </div>
         )}
       </div>
