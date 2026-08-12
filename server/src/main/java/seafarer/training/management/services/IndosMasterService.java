@@ -34,10 +34,12 @@ public class IndosMasterService {
         return seafarers.stream().map(indos -> indosMasterMapper.toResponseDTO(indos)).toList();
     }
 
-    public Page<IndosMasterResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir) {
+    public Page<IndosMasterResponseDTO> getRecordsPaginated(int page, int size, String sortBy, String sortDir, String search, UUID rankId, Boolean isActive) {
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<IndosMaster> seafarersPage = indosMasterRepository.findAll(pageable);
+        
+        String searchParam = search != null ? search.trim() : "";
+        Page<IndosMaster> seafarersPage = indosMasterRepository.findBySearchAndFilters(searchParam, rankId, isActive, pageable);
         return seafarersPage.map(indosMasterMapper::toResponseDTO);
     }
 

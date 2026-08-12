@@ -42,16 +42,20 @@ public class IndosMasterController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        Page<IndosMasterResponseDTO> paginatedRecords = indosMasterService.getRecordsPaginated(page, size, sortBy, sortDir);
-        
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) UUID rankId,
+            @RequestParam(required = false) Boolean isActive) {
+        Page<IndosMasterResponseDTO> paginatedRecords = indosMasterService.getRecordsPaginated(
+                page, size, sortBy, sortDir, search, rankId, isActive);
+
         Map<String, Object> response = new HashMap<>();
         response.put("content", paginatedRecords.getContent());
         response.put("totalPages", paginatedRecords.getTotalPages());
         response.put("totalElements", paginatedRecords.getTotalElements());
         response.put("currentPage", paginatedRecords.getNumber());
         response.put("pageSize", paginatedRecords.getSize());
-        
+
         return ResponseEntity.ok(response);
     }
 
